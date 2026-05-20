@@ -1,0 +1,152 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "01-fundamentals",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/01-fundamentals/01-fundamentals.csproj",
+      "cwd": "${workspaceFolder}/modules/01-fundamentals"
+    },
+    {
+      "name": "02-types-and-variables",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/02-types-and-variables/02-types-and-variables.csproj",
+      "cwd": "${workspaceFolder}/modules/02-types-and-variables"
+    },
+    {
+      "name": "03-operators-and-casting",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/03-operators-and-casting/03-operators-and-casting.csproj",
+      "cwd": "${workspaceFolder}/modules/03-operators-and-casting"
+    },
+    {
+      "name": "04-control-flow",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/04-control-flow/04-control-flow.csproj",
+      "cwd": "${workspaceFolder}/modules/04-control-flow"
+    },
+    {
+      "name": "05-methods-and-parameters",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/05-methods-and-parameters/05-methods-and-parameters.csproj",
+      "cwd": "${workspaceFolder}/modules/05-methods-and-parameters"
+    },
+    {
+      "name": "06-classes-and-objects",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/06-classes-and-objects/06-classes-and-objects.csproj",
+      "cwd": "${workspaceFolder}/modules/06-classes-and-objects"
+    },
+    {
+      "name": "07-oop-inheritance-polymorphism",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/07-oop-inheritance-polymorphism/07-oop-inheritance-polymorphism.csproj",
+      "cwd": "${workspaceFolder}/modules/07-oop-inheritance-polymorphism"
+    },
+    {
+      "name": "08-interfaces-and-abstract",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/08-interfaces-and-abstract/08-interfaces-and-abstract.csproj",
+      "cwd": "${workspaceFolder}/modules/08-interfaces-and-abstract"
+    },
+    {
+      "name": "09-encapsulation-and-properties",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/09-encapsulation-and-properties/09-encapsulation-and-properties.csproj",
+      "cwd": "${workspaceFolder}/modules/09-encapsulation-and-properties"
+    },
+    {
+      "name": "10-static-and-structs-enums",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/10-static-and-structs-enums/10-static-and-structs-enums.csproj",
+      "cwd": "${workspaceFolder}/modules/10-static-and-structs-enums"
+    },
+    {
+      "name": "11-arrays-and-collections",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/11-arrays-and-collections/11-arrays-and-collections.csproj",
+      "cwd": "${workspaceFolder}/modules/11-arrays-and-collections"
+    },
+    {
+      "name": "12-strings-and-formatting",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/12-strings-and-formatting/12-strings-and-formatting.csproj",
+      "cwd": "${workspaceFolder}/modules/12-strings-and-formatting"
+    },
+    {
+      "name": "13-exceptions",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/13-exceptions/13-exceptions.csproj",
+      "cwd": "${workspaceFolder}/modules/13-exceptions"
+    },
+    {
+      "name": "14-generics",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/14-generics/14-generics.csproj",
+      "cwd": "${workspaceFolder}/modules/14-generics"
+    },
+    {
+      "name": "15-delegates-events-lambda",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/15-delegates-events-lambda/15-delegates-events-lambda.csproj",
+      "cwd": "${workspaceFolder}/modules/15-delegates-events-lambda"
+    },
+    {
+      "name": "16-linq",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/16-linq/16-linq.csproj",
+      "cwd": "${workspaceFolder}/modules/16-linq"
+    },
+    {
+      "name": "17-async-await",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/17-async-await/17-async-await.csproj",
+      "cwd": "${workspaceFolder}/modules/17-async-await"
+    },
+    {
+      "name": "18-files-and-json",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/18-files-and-json/18-files-and-json.csproj",
+      "cwd": "${workspaceFolder}/modules/18-files-and-json"
+    },
+    {
+      "name": "19-modern-csharp",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/19-modern-csharp/19-modern-csharp.csproj",
+      "cwd": "${workspaceFolder}/modules/19-modern-csharp"
+    },
+    {
+      "name": "20-disposal-and-resources",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/20-disposal-and-resources/20-disposal-and-resources.csproj",
+      "cwd": "${workspaceFolder}/modules/20-disposal-and-resources"
+    },
+    {
+      "name": "21-aspnet-minimal-api",
+      "type": "coreclr",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/modules/21-aspnet-minimal-api/21-aspnet-minimal-api.csproj",
+      "cwd": "${workspaceFolder}/modules/21-aspnet-minimal-api"
+    }
+  ]
+}

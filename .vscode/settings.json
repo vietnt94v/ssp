@@ -1,0 +1,7 @@
+{
+  "typescript.tsconfigPath": "fe/vue-todo/tsconfig.app.json",
+  "vetur.enable": false,
+  "vetur.validation.template": false,
+  "vetur.validation.script": false,
+  "vetur.validation.style": false
+}

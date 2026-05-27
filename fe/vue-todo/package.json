@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
@@ -19,6 +19,7 @@
   "dependencies": {
     "pinia": "^3.0.4",
     "vue": "^3.5.32",
+    "vue-i18n": "^11.4.4",
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
@@ -37,6 +38,7 @@
     "eslint-plugin-oxlint": "~1.60.0",
     "eslint-plugin-playwright": "^2.10.1",
     "eslint-plugin-vue": "~10.8.0",
+    "happy-dom": "^20.9.0",
     "jiti": "^2.6.1",
     "jsdom": "^29.0.2",
     "npm-run-all2": "^8.0.4",

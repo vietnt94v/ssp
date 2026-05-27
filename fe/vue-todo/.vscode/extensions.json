@@ -7,5 +7,6 @@
     "EditorConfig.EditorConfig",
     "oxc.oxc-vscode",
     "esbenp.prettier-vscode"
-  ]
+  ],
+  "unwantedRecommendations": ["octref.vetur"]
 }

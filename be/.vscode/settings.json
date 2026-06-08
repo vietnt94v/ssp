@@ -1,7 +1,0 @@
-{
-  "dotnet.defaultSolution": "Ssp.Learn.sln",
-  "files.exclude": {
-    "**/bin": true,
-    "**/obj": true
-  }
-}

@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/Ssp.Cmms.Api.props" />
-</Project>

@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../buildMultiTargeting/Ssp.Cmms.Api.props" />
-</Project>

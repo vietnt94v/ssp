@@ -3,9 +3,10 @@ import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { toast } from 'sonner';
 import type { ApiError } from '@/types';
 import { useAuthStore } from '@/stores/auth-store';
+import { env } from '@/lib/env';
 
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? '/api',
+  baseURL: env.apiUrl,
   headers: { 'Content-Type': 'application/json' },
 });
 

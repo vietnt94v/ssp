@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { Wrench } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { navItems } from '@/routes/nav-items';
+import { env } from '@/lib/env';
 import { useAuthStore } from '@/stores/auth-store';
 import { useUiStore } from '@/stores/ui-store';
 
@@ -24,7 +25,9 @@ export function Sidebar() {
     >
       <div className="flex h-14 items-center gap-2 border-b px-4">
         <Wrench className="h-6 w-6 text-primary" />
-        {sidebarOpen ? <span className="font-semibold">CMMS</span> : null}
+        {sidebarOpen ? (
+          <span className="font-semibold">{env.appName}</span>
+        ) : null}
       </div>
       <nav className="flex-1 space-y-1 p-2">
         {visibleItems.map((item) => (

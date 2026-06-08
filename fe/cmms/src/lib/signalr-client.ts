@@ -5,15 +5,14 @@ import {
 } from '@microsoft/signalr';
 import type { HubConnection } from '@microsoft/signalr';
 import { useAuthStore } from '@/stores/auth-store';
-
-const HUB_URL = import.meta.env.VITE_SIGNALR_URL ?? '/hubs/work-orders';
+import { env } from '@/lib/env';
 
 let connection: HubConnection | null = null;
 
 export function getHubConnection(): HubConnection {
   if (!connection) {
     connection = new HubConnectionBuilder()
-      .withUrl(HUB_URL, {
+      .withUrl(env.signalrUrl, {
         accessTokenFactory: () => useAuthStore.getState().token ?? '',
       })
       .withAutomaticReconnect()

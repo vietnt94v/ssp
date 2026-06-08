@@ -54,11 +54,9 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var corsOrigins = GetCorsOrigins(builder.Configuration);
-
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
-        policy.WithOrigins(corsOrigins)
+        policy.WithOrigins("http://localhost:5173")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()));
@@ -90,20 +88,5 @@ RecurringJob.AddOrUpdate<GeneratePreventiveWorkOrdersJob>(
     "0 6 * * *");
 
 app.Run();
-
-static string[] GetCorsOrigins(IConfiguration configuration)
-{
-    var origins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
-    if (origins is { Length: > 0 })
-        return origins;
-
-    var raw = configuration["Cors:AllowedOrigins"];
-    if (!string.IsNullOrWhiteSpace(raw))
-    {
-        return raw.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-    }
-
-    return ["http://localhost:5173"];
-}
 
 public partial class Program;

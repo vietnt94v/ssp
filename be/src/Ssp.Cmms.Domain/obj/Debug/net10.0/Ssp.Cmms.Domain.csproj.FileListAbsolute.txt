@@ -1,0 +1,12 @@
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/bin/Debug/net10.0/Ssp.Cmms.Domain.deps.json
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/bin/Debug/net10.0/Ssp.Cmms.Domain.dll
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/bin/Debug/net10.0/Ssp.Cmms.Domain.pdb
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/obj/Debug/net10.0/Ssp.Cmms.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/obj/Debug/net10.0/Ssp.Cmms.Domain.AssemblyInfoInputs.cache
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/obj/Debug/net10.0/Ssp.Cmms.Domain.AssemblyInfo.cs
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/obj/Debug/net10.0/Ssp.Cmms.Domain.csproj.CoreCompileInputs.cache
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/obj/Debug/net10.0/Ssp.Cmms.Domain.sourcelink.json
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/obj/Debug/net10.0/Ssp.Cmms.Domain.dll
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/obj/Debug/net10.0/refint/Ssp.Cmms.Domain.dll
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/obj/Debug/net10.0/Ssp.Cmms.Domain.pdb
+/home/viet/projects/ssp/be/src/Ssp.Cmms.Domain/obj/Debug/net10.0/ref/Ssp.Cmms.Domain.dll

@@ -1,0 +1,38 @@
+{
+  "list": {
+    "items": [
+      {
+        "id": "a3000000-0000-0000-0000-000000000001",
+        "type": "WoOverdue",
+        "message": "Work order WO-2026-0007 is overdue",
+        "entityId": "b2000000-0000-0000-0000-000000000007",
+        "entityType": "WorkOrder",
+        "isAcknowledged": false,
+        "createdAt": "2026-06-07T05:00:00Z"
+      },
+      {
+        "id": "a3000000-0000-0000-0000-000000000004",
+        "type": "LowStock",
+        "message": "Ball Bearing 6204 below reorder level (3 < 10)",
+        "entityId": "f1000000-0000-0000-0000-000000000002",
+        "entityType": "SparePart",
+        "isAcknowledged": false,
+        "createdAt": "2026-06-08T00:00:00Z"
+      }
+    ],
+    "totalCount": 5,
+    "page": 1,
+    "pageSize": 20
+  },
+  "acknowledgeResponse": {
+    "id": "a3000000-0000-0000-0000-000000000001",
+    "isAcknowledged": true,
+    "acknowledgedAt": "2026-06-08T06:00:00Z",
+    "acknowledgedBy": "manager@cmms.local"
+  },
+  "createWoFromAlertResponse": {
+    "workOrderId": "b2000000-0000-0000-0000-0000000000aa",
+    "number": "WO-2026-0011",
+    "status": "Draft"
+  }
+}

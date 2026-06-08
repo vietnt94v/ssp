@@ -1,0 +1,26 @@
+{
+  "validation": {
+    "error": "One or more validation errors occurred.",
+    "code": "VALIDATION_ERROR",
+    "details": [
+      "Description is required.",
+      "EquipmentId must be a valid equipment."
+    ]
+  },
+  "unauthorized": {
+    "error": "Authentication is required to access this resource.",
+    "code": "UNAUTHORIZED"
+  },
+  "forbidden": {
+    "error": "You do not have permission to perform this action.",
+    "code": "FORBIDDEN"
+  },
+  "notFound": {
+    "error": "WorkOrder with key 'b2000000-...' was not found.",
+    "code": "NOT_FOUND"
+  },
+  "businessRule": {
+    "error": "Cannot transition work order from Draft to Completed.",
+    "code": "BUSINESS_RULE"
+  }
+}

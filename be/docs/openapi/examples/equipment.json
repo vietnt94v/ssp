@@ -1,0 +1,62 @@
+{
+  "listPaginated": {
+    "items": [
+      {
+        "id": "e1000000-0000-0000-0000-000000000001",
+        "code": "EQ-PUMP-001",
+        "name": "Coolant Pump 1",
+        "categoryId": "a1000000-0000-0000-0000-000000000001",
+        "categoryName": "Pumps",
+        "locationId": "b1000000-0000-0000-0000-000000000001",
+        "locationName": "Line A",
+        "manufacturer": "Grundfos",
+        "installDate": "2021-03-15",
+        "status": "Active",
+        "lastMaintenanceAt": "2026-05-19T08:00:00Z",
+        "imageUrl": null,
+        "createdAt": "2026-06-08T05:00:00Z",
+        "createdBy": "seed",
+        "updatedAt": null,
+        "updatedBy": null
+      }
+    ],
+    "totalCount": 5,
+    "page": 1,
+    "pageSize": 20
+  },
+  "detail": {
+    "id": "e1000000-0000-0000-0000-000000000001",
+    "code": "EQ-PUMP-001",
+    "name": "Coolant Pump 1",
+    "categoryId": "a1000000-0000-0000-0000-000000000001",
+    "categoryName": "Pumps",
+    "locationId": "b1000000-0000-0000-0000-000000000001",
+    "locationName": "Line A",
+    "manufacturer": "Grundfos",
+    "installDate": "2021-03-15",
+    "status": "Active",
+    "lastMaintenanceAt": "2026-05-19T08:00:00Z",
+    "imageUrl": null,
+    "createdAt": "2026-06-08T05:00:00Z",
+    "createdBy": "seed",
+    "updatedAt": null,
+    "updatedBy": null
+  },
+  "create": {
+    "code": "EQ-PUMP-003",
+    "name": "Booster Pump",
+    "categoryId": "a1000000-0000-0000-0000-000000000001",
+    "locationId": "b1000000-0000-0000-0000-000000000002",
+    "manufacturer": "Wilo",
+    "installDate": "2026-06-01",
+    "status": "Active"
+  },
+  "update": {
+    "name": "Booster Pump (rebuilt)",
+    "categoryId": "a1000000-0000-0000-0000-000000000001",
+    "locationId": "b1000000-0000-0000-0000-000000000002",
+    "manufacturer": "Wilo",
+    "installDate": "2026-06-01",
+    "status": "UnderMaintenance"
+  }
+}

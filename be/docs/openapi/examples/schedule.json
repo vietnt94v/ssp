@@ -1,0 +1,39 @@
+{
+  "calendarEvents": [
+    {
+      "id": "a2000000-0000-0000-0000-000000000001",
+      "title": "Monthly pump inspection",
+      "equipmentId": "e1000000-0000-0000-0000-000000000001",
+      "equipmentName": "Coolant Pump 1",
+      "frequency": "Monthly",
+      "start": "2026-06-15",
+      "allDay": true
+    },
+    {
+      "id": "a2000000-0000-0000-0000-000000000002",
+      "title": "Weekly motor check",
+      "equipmentId": "e1000000-0000-0000-0000-000000000002",
+      "equipmentName": "Drive Motor A",
+      "frequency": "Weekly",
+      "start": "2026-06-10",
+      "allDay": true
+    }
+  ],
+  "createMonthly": {
+    "equipmentId": "e1000000-0000-0000-0000-000000000001",
+    "title": "Monthly pump inspection",
+    "frequency": "Monthly",
+    "intervalValue": 1,
+    "nextDueDate": "2026-07-01",
+    "isActive": true
+  },
+  "createByMeter": {
+    "equipmentId": "e1000000-0000-0000-0000-000000000004",
+    "title": "Compressor 500h service",
+    "frequency": "ByMeter",
+    "intervalValue": 1,
+    "meterThreshold": 500,
+    "nextDueDate": "2026-06-22",
+    "isActive": true
+  }
+}

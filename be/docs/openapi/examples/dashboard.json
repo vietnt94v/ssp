@@ -1,0 +1,33 @@
+{
+  "kpi": {
+    "openWorkOrders": 6,
+    "overdueWorkOrders": 2,
+    "brokenEquipment": 1,
+    "monthlyCost": 320.0,
+    "mttrHours": 2.5,
+    "mtbfHours": 168.0
+  },
+  "trend": [
+    { "date": "2026-05-10", "created": 3, "completed": 2 },
+    { "date": "2026-05-11", "created": 1, "completed": 4 },
+    { "date": "2026-05-12", "created": 2, "completed": 1 }
+  ],
+  "statusBreakdown": [
+    { "status": "Draft", "count": 2 },
+    { "status": "Assigned", "count": 2 },
+    { "status": "InProgress", "count": 2 },
+    { "status": "OnHold", "count": 1 },
+    { "status": "Completed", "count": 2 },
+    { "status": "Closed", "count": 1 }
+  ],
+  "urgent": [
+    {
+      "id": "b2000000-0000-0000-0000-000000000007",
+      "number": "WO-2026-0007",
+      "priority": "Critical",
+      "status": "Assigned",
+      "equipmentName": "Main Conveyor",
+      "deadline": "2026-06-07T17:00:00Z"
+    }
+  ]
+}

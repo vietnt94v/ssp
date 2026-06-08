@@ -1,0 +1,39 @@
+{
+  "list": {
+    "items": [
+      {
+        "id": "d1000000-0000-0000-0000-000000000001",
+        "userId": "33333333-3333-3333-3333-333333333333",
+        "name": "Tom Technician",
+        "department": "Mechanical",
+        "skills": ["Mechanical", "Hydraulics"],
+        "openWorkOrderCount": 3,
+        "workloadPercent": 75,
+        "rating": 4.5
+      },
+      {
+        "id": "d1000000-0000-0000-0000-000000000002",
+        "userId": "33333333-3333-3333-3333-333333333334",
+        "name": "Tina Technician",
+        "department": "Electrical",
+        "skills": ["Electrical"],
+        "openWorkOrderCount": 2,
+        "workloadPercent": 50,
+        "rating": 4.8
+      }
+    ],
+    "totalCount": 2,
+    "page": 1,
+    "pageSize": 20
+  },
+  "workload": {
+    "technicianId": "d1000000-0000-0000-0000-000000000001",
+    "openWorkOrderCount": 3,
+    "workloadPercent": 75,
+    "byStatus": {
+      "Assigned": 1,
+      "InProgress": 1,
+      "OnHold": 1
+    }
+  }
+}

@@ -1,0 +1,802 @@
+openapi: 3.1.0
+info:
+  title: CMMS API
+  version: 1.0.0
+  description: >
+    Computerized Maintenance Management System REST API.
+    Modules: Auth, Dashboard, Equipment, Work Orders, Schedule, Technicians,
+    Spare Parts, Reports, Alerts, Settings. Roles: Admin, Manager, Technician.
+servers:
+  - url: http://localhost:5000
+    description: Local development
+
+tags:
+  - name: Auth
+  - name: Dashboard
+  - name: Equipment
+  - name: WorkOrders
+  - name: Schedule
+  - name: Technicians
+  - name: SpareParts
+  - name: Reports
+  - name: Alerts
+  - name: Settings
+
+security:
+  - bearerAuth: []
+
+paths:
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: Authenticate and receive a JWT
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+            examples:
+              manager:
+                summary: Manager login
+                externalValue: ./examples/auth.json#/loginRequest
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LoginResponse' }
+              examples:
+                ok:
+                  externalValue: ./examples/auth.json#/loginResponse
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Exchange a refresh token for a new access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RefreshRequest' }
+      responses:
+        '200':
+          description: Refreshed
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LoginResponse' }
+
+  /api/auth/forgot-password:
+    post:
+      tags: [Auth]
+      summary: Request a password reset
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ForgotPasswordRequest' }
+            examples:
+              default:
+                externalValue: ./examples/auth.json#/forgotPasswordRequest
+      responses:
+        '204': { description: Accepted }
+
+  /api/dashboard/kpi:
+    get:
+      tags: [Dashboard]
+      summary: Dashboard KPI summary
+      responses:
+        '200':
+          description: KPI summary
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DashboardKpi' }
+              examples:
+                ok:
+                  externalValue: ./examples/dashboard.json#/kpi
+
+  /api/dashboard/wo-trend:
+    get:
+      tags: [Dashboard]
+      summary: Work order created/completed trend
+      parameters:
+        - name: days
+          in: query
+          schema: { type: integer, default: 30 }
+      responses:
+        '200':
+          description: Trend points
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/TrendPoint' }
+              examples:
+                ok:
+                  externalValue: ./examples/dashboard.json#/trend
+
+  /api/dashboard/urgent-wo:
+    get:
+      tags: [Dashboard]
+      summary: High priority and overdue work orders
+      responses:
+        '200':
+          description: Urgent work orders
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/dashboard.json#/urgent
+
+  /api/equipment:
+    get:
+      tags: [Equipment]
+      summary: List equipment (paginated, filterable)
+      parameters:
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/EquipmentStatus' } }
+        - { name: categoryId, in: query, schema: { type: string, format: uuid } }
+        - { name: locationId, in: query, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/PageSize' }
+        - { $ref: '#/components/parameters/SortBy' }
+        - { $ref: '#/components/parameters/SortDir' }
+      responses:
+        '200':
+          description: Paginated equipment
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/equipment.json#/listPaginated
+    post:
+      tags: [Equipment]
+      summary: Create equipment (Admin, Manager)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateEquipment' }
+            examples:
+              default:
+                externalValue: ./examples/equipment.json#/create
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/equipment.json#/detail
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /api/equipment/{id}:
+    parameters:
+      - { $ref: '#/components/parameters/IdPath' }
+    get:
+      tags: [Equipment]
+      summary: Get equipment by id
+      responses:
+        '200':
+          description: Equipment
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/equipment.json#/detail
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Equipment]
+      summary: Update equipment (Admin, Manager)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateEquipment' }
+            examples:
+              default:
+                externalValue: ./examples/equipment.json#/update
+      responses:
+        '200': { description: Updated }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Equipment]
+      summary: Soft-delete equipment (Admin, Manager)
+      responses:
+        '204': { description: Deleted }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/work-orders:
+    get:
+      tags: [WorkOrders]
+      summary: List work orders (paginated, filterable)
+      parameters:
+        - { name: type, in: query, schema: { $ref: '#/components/schemas/WorkOrderType' } }
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/WorkOrderStatus' } }
+        - { name: priority, in: query, schema: { $ref: '#/components/schemas/WorkOrderPriority' } }
+        - { name: technicianId, in: query, schema: { type: string, format: uuid } }
+        - { name: equipmentId, in: query, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/PageSize' }
+        - { $ref: '#/components/parameters/SortBy' }
+        - { $ref: '#/components/parameters/SortDir' }
+      responses:
+        '200':
+          description: Paginated work orders
+          content:
+            application/json:
+              examples:
+                detail:
+                  externalValue: ./examples/work-orders.json#/workOrderDetail
+    post:
+      tags: [WorkOrders]
+      summary: Create work order (Admin, Manager)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateWorkOrder' }
+            examples:
+              corrective:
+                summary: Corrective WO - motor overheating
+                externalValue: ./examples/work-orders.json#/createCorrective
+              preventive:
+                summary: Preventive WO - monthly inspection
+                externalValue: ./examples/work-orders.json#/createPreventive
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              examples:
+                created:
+                  externalValue: ./examples/work-orders.json#/workOrderDetail
+        '400': { $ref: '#/components/responses/ValidationError' }
+
+  /api/work-orders/kanban:
+    get:
+      tags: [WorkOrders]
+      summary: Work orders grouped by status (Kanban)
+      responses:
+        '200':
+          description: Kanban board
+          content:
+            application/json:
+              examples:
+                board:
+                  externalValue: ./examples/work-orders.json#/kanban
+
+  /api/work-orders/{id}:
+    parameters:
+      - { $ref: '#/components/parameters/IdPath' }
+    get:
+      tags: [WorkOrders]
+      summary: Get work order by id
+      responses:
+        '200':
+          description: Work order detail
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/work-orders.json#/workOrderDetail
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [WorkOrders]
+      summary: Update work order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateWorkOrder' }
+      responses:
+        '200': { description: Updated }
+    delete:
+      tags: [WorkOrders]
+      summary: Soft-delete work order (Admin, Manager)
+      responses:
+        '204': { description: Deleted }
+
+  /api/work-orders/{id}/status:
+    parameters:
+      - { $ref: '#/components/parameters/IdPath' }
+    patch:
+      tags: [WorkOrders]
+      summary: Change work order status (state machine enforced)
+      description: >
+        Allowed transitions: Draft->Assigned, Assigned->InProgress|Draft,
+        InProgress->OnHold|Completed, OnHold->InProgress, Completed->Closed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WorkOrderStatusChange' }
+            examples:
+              start:
+                externalValue: ./examples/work-orders.json#/statusChange
+      responses:
+        '200':
+          description: Status changed
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/work-orders.json#/workOrderDetail
+        '409':
+          description: Invalid transition
+          content:
+            application/json:
+              examples:
+                invalid:
+                  externalValue: ./examples/errors.json#/businessRule
+
+  /api/work-orders/{id}/export:
+    parameters:
+      - { $ref: '#/components/parameters/IdPath' }
+      - name: format
+        in: query
+        schema: { type: string, enum: [pdf, xlsx] }
+    get:
+      tags: [WorkOrders]
+      summary: Export a work order to PDF or Excel
+      responses:
+        '200':
+          description: File stream
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
+
+  /api/schedules:
+    get:
+      tags: [Schedule]
+      summary: List maintenance schedules
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/PageSize' }
+      responses:
+        '200': { description: Paginated schedules }
+    post:
+      tags: [Schedule]
+      summary: Create schedule (Admin, Manager)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateSchedule' }
+            examples:
+              monthly:
+                externalValue: ./examples/schedule.json#/createMonthly
+              byMeter:
+                externalValue: ./examples/schedule.json#/createByMeter
+      responses:
+        '201': { description: Created }
+
+  /api/schedules/calendar:
+    get:
+      tags: [Schedule]
+      summary: Calendar events between two dates
+      parameters:
+        - { name: from, in: query, schema: { type: string, format: date } }
+        - { name: to, in: query, schema: { type: string, format: date } }
+      responses:
+        '200':
+          description: Calendar events
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/schedule.json#/calendarEvents
+
+  /api/schedules/{id}:
+    parameters:
+      - { $ref: '#/components/parameters/IdPath' }
+    put:
+      tags: [Schedule]
+      summary: Update schedule (Admin, Manager)
+      responses:
+        '200': { description: Updated }
+    delete:
+      tags: [Schedule]
+      summary: Delete schedule (Admin, Manager)
+      responses:
+        '204': { description: Deleted }
+
+  /api/technicians:
+    get:
+      tags: [Technicians]
+      summary: List technicians with workload (Admin, Manager)
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/PageSize' }
+      responses:
+        '200':
+          description: Paginated technicians
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/technicians.json#/list
+
+  /api/technicians/{id}:
+    parameters:
+      - { $ref: '#/components/parameters/IdPath' }
+    get:
+      tags: [Technicians]
+      summary: Technician profile
+      responses:
+        '200': { description: Technician }
+
+  /api/technicians/{id}/workload:
+    parameters:
+      - { $ref: '#/components/parameters/IdPath' }
+    get:
+      tags: [Technicians]
+      summary: Technician workload breakdown
+      responses:
+        '200':
+          description: Workload
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/technicians.json#/workload
+
+  /api/spare-parts:
+    get:
+      tags: [SpareParts]
+      summary: List spare parts (Admin, Manager)
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/PageSize' }
+      responses:
+        '200': { description: Paginated spare parts }
+    post:
+      tags: [SpareParts]
+      summary: Create spare part (Admin, Manager)
+      responses:
+        '201': { description: Created }
+
+  /api/spare-parts/{id}:
+    parameters:
+      - { $ref: '#/components/parameters/IdPath' }
+    get:
+      tags: [SpareParts]
+      summary: Get spare part
+      responses:
+        '200': { description: Spare part }
+    put:
+      tags: [SpareParts]
+      summary: Update spare part (Admin, Manager)
+      responses:
+        '200': { description: Updated }
+
+  /api/reports/kpi:
+    get:
+      tags: [Reports]
+      summary: MTTR, MTBF, OEE impact, overdue rate
+      parameters:
+        - { name: from, in: query, schema: { type: string, format: date } }
+        - { name: to, in: query, schema: { type: string, format: date } }
+      responses:
+        '200':
+          description: KPI report
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/reports.json#/kpi
+
+  /api/reports/cost:
+    get:
+      tags: [Reports]
+      summary: Cost breakdown (labor vs parts)
+      parameters:
+        - { name: from, in: query, schema: { type: string, format: date } }
+        - { name: to, in: query, schema: { type: string, format: date } }
+      responses:
+        '200':
+          description: Cost report
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/reports.json#/cost
+
+  /api/reports/equipment-history/{id}:
+    parameters:
+      - { $ref: '#/components/parameters/IdPath' }
+    get:
+      tags: [Reports]
+      summary: Maintenance timeline for an equipment
+      responses:
+        '200':
+          description: Equipment history
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/reports.json#/equipmentHistory
+
+  /api/reports/downtime:
+    get:
+      tags: [Reports]
+      summary: Downtime by equipment
+      parameters:
+        - { name: from, in: query, schema: { type: string, format: date } }
+        - { name: to, in: query, schema: { type: string, format: date } }
+      responses:
+        '200':
+          description: Downtime report
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/reports.json#/downtime
+
+  /api/alerts:
+    get:
+      tags: [Alerts]
+      summary: List alerts
+      parameters:
+        - { name: acknowledged, in: query, schema: { type: boolean } }
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/PageSize' }
+      responses:
+        '200':
+          description: Paginated alerts
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/alerts.json#/list
+
+  /api/alerts/{id}/acknowledge:
+    parameters:
+      - { $ref: '#/components/parameters/IdPath' }
+    patch:
+      tags: [Alerts]
+      summary: Acknowledge an alert
+      responses:
+        '200':
+          description: Acknowledged
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/alerts.json#/acknowledgeResponse
+
+  /api/alerts/{id}/create-wo:
+    parameters:
+      - { $ref: '#/components/parameters/IdPath' }
+    post:
+      tags: [Alerts]
+      summary: Create a work order from an alert (Admin, Manager)
+      responses:
+        '201':
+          description: Work order created
+          content:
+            application/json:
+              examples:
+                ok:
+                  externalValue: ./examples/alerts.json#/createWoFromAlertResponse
+
+  /api/settings/users:
+    get:
+      tags: [Settings]
+      summary: List users (Admin)
+      responses:
+        '200': { description: Users }
+    post:
+      tags: [Settings]
+      summary: Create user (Admin)
+      responses:
+        '201': { description: Created }
+
+  /api/settings/categories:
+    get:
+      tags: [Settings]
+      summary: List categories (Admin)
+      responses:
+        '200': { description: Categories }
+
+  /api/settings/locations:
+    get:
+      tags: [Settings]
+      summary: List locations (Admin)
+      responses:
+        '200': { description: Locations }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    IdPath:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, default: 1, minimum: 1 }
+    PageSize:
+      name: pageSize
+      in: query
+      schema: { type: integer, default: 20, minimum: 1, maximum: 100 }
+    SortBy:
+      name: sortBy
+      in: query
+      schema: { type: string }
+    SortDir:
+      name: sortDir
+      in: query
+      schema: { type: string, enum: [asc, desc] }
+
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiError' }
+          examples:
+            default:
+              externalValue: ./examples/errors.json#/unauthorized
+    Forbidden:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiError' }
+          examples:
+            default:
+              externalValue: ./examples/errors.json#/forbidden
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiError' }
+          examples:
+            default:
+              externalValue: ./examples/errors.json#/notFound
+    ValidationError:
+      description: Validation failed
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiError' }
+          examples:
+            default:
+              externalValue: ./examples/errors.json#/validation
+
+  schemas:
+    ApiError:
+      type: object
+      properties:
+        error: { type: string }
+        code: { type: string }
+        details:
+          type: array
+          items: { type: string }
+      required: [error, code]
+
+    Role:
+      type: string
+      enum: [Admin, Manager, Technician]
+    EquipmentStatus:
+      type: string
+      enum: [Active, UnderMaintenance, Broken, Decommissioned]
+    WorkOrderType:
+      type: string
+      enum: [Corrective, Preventive, Inspection]
+    WorkOrderStatus:
+      type: string
+      enum: [Draft, Assigned, InProgress, OnHold, Completed, Closed]
+    WorkOrderPriority:
+      type: string
+      enum: [Low, Medium, High, Critical]
+    ScheduleFrequency:
+      type: string
+      enum: [Daily, Weekly, Monthly, ByMeter]
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string }
+    RefreshRequest:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken: { type: string }
+    ForgotPasswordRequest:
+      type: object
+      required: [email]
+      properties:
+        email: { type: string, format: email }
+    LoginResponse:
+      type: object
+      properties:
+        accessToken: { type: string }
+        refreshToken: { type: string }
+        expiresIn: { type: integer }
+        user:
+          type: object
+          properties:
+            id: { type: string, format: uuid }
+            email: { type: string }
+            fullName: { type: string }
+            role: { $ref: '#/components/schemas/Role' }
+
+    CreateEquipment:
+      type: object
+      required: [code, name, categoryId, locationId, status]
+      properties:
+        code: { type: string }
+        name: { type: string }
+        categoryId: { type: string, format: uuid }
+        locationId: { type: string, format: uuid }
+        manufacturer: { type: string, nullable: true }
+        installDate: { type: string, format: date, nullable: true }
+        status: { $ref: '#/components/schemas/EquipmentStatus' }
+    UpdateEquipment:
+      allOf:
+        - $ref: '#/components/schemas/CreateEquipment'
+
+    ChecklistItemInput:
+      type: object
+      properties:
+        description: { type: string }
+        isDone: { type: boolean }
+    CreateWorkOrder:
+      type: object
+      required: [type, priority, equipmentId, description]
+      properties:
+        type: { $ref: '#/components/schemas/WorkOrderType' }
+        priority: { $ref: '#/components/schemas/WorkOrderPriority' }
+        equipmentId: { type: string, format: uuid }
+        assignedTechnicianId: { type: string, format: uuid, nullable: true }
+        description: { type: string }
+        deadline: { type: string, format: date-time, nullable: true }
+        checklist:
+          type: array
+          items: { $ref: '#/components/schemas/ChecklistItemInput' }
+    WorkOrderStatusChange:
+      type: object
+      required: [status]
+      properties:
+        status: { $ref: '#/components/schemas/WorkOrderStatus' }
+
+    CreateSchedule:
+      type: object
+      required: [equipmentId, title, frequency, intervalValue, nextDueDate]
+      properties:
+        equipmentId: { type: string, format: uuid }
+        title: { type: string }
+        frequency: { $ref: '#/components/schemas/ScheduleFrequency' }
+        intervalValue: { type: integer }
+        meterThreshold: { type: number, nullable: true }
+        nextDueDate: { type: string, format: date }
+        isActive: { type: boolean }
+
+    DashboardKpi:
+      type: object
+      properties:
+        openWorkOrders: { type: integer }
+        overdueWorkOrders: { type: integer }
+        brokenEquipment: { type: integer }
+        monthlyCost: { type: number }
+        mttrHours: { type: number }
+        mtbfHours: { type: number }
+    TrendPoint:
+      type: object
+      properties:
+        date: { type: string, format: date }
+        created: { type: integer }
+        completed: { type: integer }

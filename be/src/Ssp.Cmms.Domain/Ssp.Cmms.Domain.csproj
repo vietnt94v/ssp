@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Ssp.Cmms.Domain</RootNamespace>
+  </PropertyGroup>
+
+</Project>

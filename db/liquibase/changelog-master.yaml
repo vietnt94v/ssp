@@ -1,0 +1,10 @@
+# Master changelog. This file only orders the SQL changesets; all schema and
+# data changes live in the .sql files under changesets/ (per project rule:
+# SQL changesets only, no XML/YAML changesets that do real work).
+databaseChangeLog:
+  - include:
+      file: changesets/001-initial-schema.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changesets/002-seed-data.sql
+      relativeToChangelogFile: true

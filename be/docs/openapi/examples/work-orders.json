@@ -1,0 +1,87 @@
+{
+  "createCorrective": {
+    "type": "Corrective",
+    "priority": "Critical",
+    "equipmentId": "e1000000-0000-0000-0000-000000000002",
+    "assignedTechnicianId": "d1000000-0000-0000-0000-000000000002",
+    "description": "Drive motor overheating, smell of burnt insulation",
+    "deadline": "2026-06-10T17:00:00Z",
+    "checklist": [
+      { "description": "Lockout/tagout", "isDone": false },
+      { "description": "Measure winding resistance", "isDone": false }
+    ]
+  },
+  "createPreventive": {
+    "type": "Preventive",
+    "priority": "Medium",
+    "equipmentId": "e1000000-0000-0000-0000-000000000001",
+    "assignedTechnicianId": "d1000000-0000-0000-0000-000000000001",
+    "description": "Monthly pump inspection per PM schedule",
+    "deadline": "2026-06-15T12:00:00Z",
+    "checklist": [
+      { "description": "Inspect impeller wear", "isDone": false },
+      { "description": "Check seal for leaks", "isDone": false }
+    ]
+  },
+  "statusChange": {
+    "status": "InProgress"
+  },
+  "workOrderDetail": {
+    "id": "b2000000-0000-0000-0000-000000000003",
+    "number": "WO-2026-0003",
+    "type": "Preventive",
+    "priority": "Medium",
+    "status": "InProgress",
+    "equipmentId": "e1000000-0000-0000-0000-000000000001",
+    "equipmentName": "Coolant Pump 1",
+    "assignedTechnicianId": "d1000000-0000-0000-0000-000000000001",
+    "assignedTechnicianName": "Tom Technician",
+    "description": "Monthly pump inspection",
+    "deadline": "2026-06-11T12:00:00Z",
+    "checklist": [
+      {
+        "id": "c2000000-0000-0000-0000-000000000001",
+        "description": "Lockout/tagout equipment",
+        "isDone": true
+      },
+      {
+        "id": "c2000000-0000-0000-0000-000000000003",
+        "description": "Check seal for leaks",
+        "isDone": false
+      }
+    ],
+    "parts": [],
+    "costs": [],
+    "totalCost": 0,
+    "createdAt": "2026-06-08T05:00:00Z",
+    "createdBy": "seed",
+    "updatedAt": null,
+    "updatedBy": null
+  },
+  "kanban": {
+    "Draft": [
+      {
+        "id": "b2000000-0000-0000-0000-000000000001",
+        "number": "WO-2026-0001",
+        "type": "Corrective",
+        "priority": "High",
+        "equipmentName": "Main Conveyor",
+        "assignedTechnicianName": null
+      }
+    ],
+    "Assigned": [
+      {
+        "id": "b2000000-0000-0000-0000-000000000002",
+        "number": "WO-2026-0002",
+        "type": "Corrective",
+        "priority": "Critical",
+        "equipmentName": "Drive Motor A",
+        "assignedTechnicianName": "Tina Technician"
+      }
+    ],
+    "InProgress": [],
+    "OnHold": [],
+    "Completed": [],
+    "Closed": []
+  }
+}

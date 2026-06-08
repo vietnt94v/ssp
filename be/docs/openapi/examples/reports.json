@@ -1,0 +1,51 @@
+{
+  "kpi": {
+    "from": "2026-05-01",
+    "to": "2026-05-31",
+    "mttrHours": 2.5,
+    "mtbfHours": 168.0,
+    "oeeImpactPercent": 3.2,
+    "overdueRatePercent": 18.0
+  },
+  "cost": {
+    "from": "2026-05-01",
+    "to": "2026-05-31",
+    "totalCost": 320.0,
+    "laborCost": 210.0,
+    "partsCost": 110.0,
+    "byEquipment": [
+      {
+        "equipmentId": "e1000000-0000-0000-0000-000000000001",
+        "equipmentName": "Coolant Pump 1",
+        "laborCost": 120.0,
+        "partsCost": 85.0,
+        "totalCost": 205.0
+      }
+    ]
+  },
+  "equipmentHistory": {
+    "equipmentId": "e1000000-0000-0000-0000-000000000001",
+    "equipmentName": "Coolant Pump 1",
+    "events": [
+      {
+        "workOrderNumber": "WO-2026-0005",
+        "type": "Corrective",
+        "completedAt": "2026-06-06T08:00:00Z",
+        "summary": "Replaced mechanical seal, tested run",
+        "downtimeMinutes": 90
+      }
+    ]
+  },
+  "downtime": {
+    "from": "2026-05-01",
+    "to": "2026-05-31",
+    "byEquipment": [
+      {
+        "equipmentId": "e1000000-0000-0000-0000-000000000003",
+        "equipmentName": "Main Conveyor",
+        "downtimeMinutes": 480,
+        "incidents": 2
+      }
+    ]
+  }
+}

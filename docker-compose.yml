@@ -1,0 +1,46 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cmms-postgres
+    environment:
+      POSTGRES_DB: cmms
+      POSTGRES_USER: cmms
+      POSTGRES_PASSWORD: cmms_dev
+    ports:
+      - "5434:5432"
+    volumes:
+      - cmms_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cmms -d cmms"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  liquibase:
+    image: liquibase/liquibase:4.29
+    container_name: cmms-liquibase
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./db/liquibase:/liquibase/changelog
+    command: >
+      --defaults-file=/liquibase/changelog/liquibase.docker.properties
+      update
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: cmms-pgadmin
+    profiles: ["tools"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@cmms.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "5050:80"
+
+volumes:
+  cmms_pg_data:

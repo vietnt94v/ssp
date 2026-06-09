@@ -9,6 +9,8 @@ info:
 servers:
   - url: http://localhost:5000
     description: Local development
+  - url: https://ssp-cmms.onrender.com
+    description: Production (Render)
 
 tags:
   - name: Auth

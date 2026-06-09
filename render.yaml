@@ -10,7 +10,7 @@ services:
     name: ssp-api
     runtime: docker
     repo: https://github.com/vietnt94v/ssp
-    branch: deploy/render-api
+    branch: main
     region: oregon
     plan: free
     rootDir: be

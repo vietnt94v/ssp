@@ -81,6 +81,7 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapGet("/healthz", () => Results.Ok(new { status = "ok" }));
 app.MapControllers();
 app.MapHub<WorkOrderHub>(WorkOrderHub.Path);
 app.MapHangfireDashboard("/hangfire");

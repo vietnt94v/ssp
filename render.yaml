@@ -1,0 +1,33 @@
+databases:
+  - name: ssp-cmms-db
+    databaseName: cmms
+    user: cmms
+    region: oregon
+    plan: free
+
+services:
+  - type: web
+    name: ssp-api
+    runtime: docker
+    repo: https://github.com/vietnt94v/ssp
+    branch: deploy/render-api
+    region: oregon
+    plan: free
+    rootDir: be
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__Default
+        sync: false
+      - key: Jwt__SigningKey
+        generateValue: true
+      - key: Jwt__Issuer
+        value: Ssp.Cmms
+      - key: Jwt__Audience
+        value: Ssp.Cmms.Client
+      - key: Jwt__AccessTokenMinutes
+        value: "60"
+      - key: Cors__AllowedOrigins__0
+        sync: false

@@ -54,9 +54,26 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var allowedOrigins = builder.Configuration
+var configuredOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")
-    .Get<string[]>() ?? ["http://localhost:5173"];
+    .Get<string[]>()
+    ?.Where(static origin => !string.IsNullOrWhiteSpace(origin))
+    .Select(static origin => origin.Trim())
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToArray() ?? [];
+
+var allowedOrigins = configuredOrigins.Length > 0
+    ? configuredOrigins
+    : ["http://localhost:5173"];
+
+if (builder.Environment.IsProduction())
+{
+    const string localDevFrontend = "http://localhost:5173";
+    if (!allowedOrigins.Contains(localDevFrontend, StringComparer.OrdinalIgnoreCase))
+    {
+        allowedOrigins = [..allowedOrigins, localDevFrontend];
+    }
+}
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
@@ -67,6 +84,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.Logger.LogInformation(
+    "CORS allowed origins: {Origins}",
+    string.Join(", ", allowedOrigins));
+
+app.UseCors();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseSerilogRequestLogging();
 
@@ -77,7 +99,6 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "CMMS API v1"));
 }
 
-app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 

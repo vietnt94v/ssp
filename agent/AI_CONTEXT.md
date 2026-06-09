@@ -102,9 +102,22 @@ docker compose up -d
 # Backend API (after .NET 8 SDK installed)
 cd be/src/Ssp.Cmms.Api && dotnet run    # http://localhost:5000, Swagger at /swagger
 
-# Frontend
-cd fe/cmms && pnpm install && pnpm dev   # http://localhost:5173
+# Frontend (http://localhost:5173)
+cd fe/cmms && pnpm install
+pnpm dev          # local API via Vite proxy → http://localhost:5000
+pnpm dev:remote   # Render API → https://ssp-cmms.onrender.com (no local backend)
 ```
+
+## Environment configuration
+
+| Target | Frontend command | API URL | Config file |
+| --- | --- | --- | --- |
+| Local API | `pnpm dev` | `http://localhost:5000` (proxied `/api`) | `fe/cmms/.env.development` |
+| Render API (local FE) | `pnpm dev:remote` | `https://ssp-cmms.onrender.com` | `fe/cmms/.env.remote` |
+| Vercel production | `pnpm build` | `https://ssp-cmms.onrender.com` | Vercel env vars (see `.env.production.example`) |
+
+Render CORS must allow `http://localhost:5173` for `pnpm dev:remote`, and your
+Vercel URL for production (`Cors__AllowedOrigins__0` / `__1` in Render).
 
 Default dev connection string (host port 5434 — 5432 was taken by another
 local container, so Compose maps `5434:5432`):

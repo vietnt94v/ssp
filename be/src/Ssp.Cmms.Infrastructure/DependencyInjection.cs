@@ -32,9 +32,13 @@ public static class DependencyInjection
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IRealtimeNotifier, SignalRNotifier>();
+        services.AddSingleton<AuthCookieFactory>();
+        services.AddScoped<IAuthService, AuthService>();
 
         services.Configure<JwtSettings>(
             configuration.GetSection(JwtSettings.SectionName));
+        services.Configure<AuthCookieSettings>(
+            configuration.GetSection(AuthCookieSettings.SectionName));
 
         var jwt = configuration.GetSection(JwtSettings.SectionName)
             .Get<JwtSettings>() ?? new JwtSettings();
@@ -55,18 +59,31 @@ public static class DependencyInjection
                         Encoding.UTF8.GetBytes(jwt.SigningKey))
                 };
 
-                // Allow SignalR to authenticate via access_token query string.
+                // Read the JWT from the HttpOnly access_token cookie. SignalR
+                // may still pass it via the access_token query string during
+                // the WebSocket handshake.
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
                     {
-                        var accessToken = context.Request.Query["access_token"];
                         var path = context.HttpContext.Request.Path;
-                        if (!string.IsNullOrEmpty(accessToken) &&
+                        var queryToken = context.Request.Query["access_token"];
+
+                        if (!string.IsNullOrEmpty(queryToken) &&
                             path.StartsWithSegments(WorkOrderHub.Path))
                         {
-                            context.Token = accessToken;
+                            context.Token = queryToken;
                         }
+                        else
+                        {
+                            var cookieToken = context.Request.Cookies[
+                                AuthCookieSettings.AccessTokenName];
+                            if (!string.IsNullOrEmpty(cookieToken))
+                            {
+                                context.Token = cookieToken;
+                            }
+                        }
+
                         return Task.CompletedTask;
                     }
                 };

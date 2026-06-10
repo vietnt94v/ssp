@@ -4,7 +4,6 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import type { HubConnection } from '@microsoft/signalr';
-import { useAuthStore } from '@/stores/auth-store';
 import { env } from '@/lib/env';
 
 let connection: HubConnection | null = null;
@@ -13,7 +12,7 @@ export function getHubConnection(): HubConnection {
   if (!connection) {
     connection = new HubConnectionBuilder()
       .withUrl(env.signalrUrl, {
-        accessTokenFactory: () => useAuthStore.getState().token ?? '',
+        withCredentials: true,
       })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Warning)

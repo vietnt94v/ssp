@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
+import { AuthGuard } from '@/routes/AuthGuard';
 import { ProtectedRoute } from '@/routes/ProtectedRoute';
 
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
@@ -86,26 +87,34 @@ export const router = createBrowserRouter([
   { path: '/auth/login', element: <LoginPage /> },
   { path: '/auth/forgot-password', element: <ForgotPasswordPage /> },
   {
-    element: <ProtectedRoute />,
+    element: <AuthGuard />,
     children: [
       {
-        element: <AppShell />,
+        element: <ProtectedRoute />,
         children: [
-          { path: '/dashboard', element: <DashboardPage /> },
-
-          { path: '/equipment', element: <EquipmentListPage /> },
-          { path: '/equipment/:id', element: <EquipmentDetailPage /> },
-
-          { path: '/work-orders', element: <WorkOrderListPage /> },
-          { path: '/work-orders/:id', element: <WorkOrderDetailPage /> },
           {
-            path: '/work-orders/:id/edit',
-            element: <WorkOrderFormPage />,
+            element: <AppShell />,
+            children: [
+              { path: '/dashboard', element: <DashboardPage /> },
+
+              { path: '/equipment', element: <EquipmentListPage /> },
+              { path: '/equipment/:id', element: <EquipmentDetailPage /> },
+
+              { path: '/work-orders', element: <WorkOrderListPage /> },
+              {
+                path: '/work-orders/:id',
+                element: <WorkOrderDetailPage />,
+              },
+              {
+                path: '/work-orders/:id/edit',
+                element: <WorkOrderFormPage />,
+              },
+
+              { path: '/schedule', element: <SchedulePage /> },
+
+              { path: '/alerts', element: <AlertsPage /> },
+            ],
           },
-
-          { path: '/schedule', element: <SchedulePage /> },
-
-          { path: '/alerts', element: <AlertsPage /> },
         ],
       },
       {

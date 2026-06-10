@@ -6,6 +6,7 @@ public interface IJwtTokenService
 {
     string CreateAccessToken(User user);
     string CreateRefreshToken();
+    string HashRefreshToken(string refreshToken);
 }
 
 public interface IPasswordHasher

@@ -48,6 +48,11 @@ public class ExceptionHandlingMiddleware
                 "BUSINESS_RULE",
                 b.Message,
                 Array.Empty<string>()),
+            UnauthorizedException u => (
+                HttpStatusCode.Unauthorized,
+                "UNAUTHORIZED",
+                u.Message,
+                Array.Empty<string>()),
             _ => (
                 HttpStatusCode.InternalServerError,
                 "INTERNAL_ERROR",

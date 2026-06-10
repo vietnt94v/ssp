@@ -45,7 +45,13 @@ public class JwtTokenService : IJwtTokenService
 
     public string CreateRefreshToken()
     {
-        var bytes = RandomNumberGenerator.GetBytes(32);
+        var bytes = RandomNumberGenerator.GetBytes(64);
         return Convert.ToBase64String(bytes);
+    }
+
+    public string HashRefreshToken(string refreshToken)
+    {
+        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken));
+        return Convert.ToHexString(bytes);
     }
 }

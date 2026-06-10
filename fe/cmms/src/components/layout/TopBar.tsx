@@ -10,18 +10,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useAuthStore } from '@/stores/auth-store';
 import { useUiStore } from '@/stores/ui-store';
 import { useNotificationStore } from '@/stores/notification-store';
+import { useAuth } from '@/features/auth/hooks/use-auth';
 
 export function TopBar() {
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
+  const { user, logout } = useAuth();
   const toggleSidebar = useUiStore((s) => s.toggleSidebar);
   const unreadCount = useNotificationStore((s) => s.unreadCount);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/auth/login');
   };
 

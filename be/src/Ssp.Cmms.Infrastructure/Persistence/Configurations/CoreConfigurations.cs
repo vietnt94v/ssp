@@ -24,6 +24,34 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     }
 }
 
+public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
+{
+    public void Configure(EntityTypeBuilder<RefreshToken> b)
+    {
+        b.ToTable("refresh_tokens");
+        b.HasKey(x => x.Id);
+        b.Property(x => x.Id).HasColumnName("id");
+        b.Property(x => x.TokenHash).HasColumnName("token_hash").HasMaxLength(128).IsRequired();
+        b.Property(x => x.UserId).HasColumnName("user_id").IsRequired();
+        b.Property(x => x.FamilyId).HasColumnName("family_id").IsRequired();
+        b.Property(x => x.ExpiresAt).HasColumnName("expires_at").IsRequired();
+        b.Property(x => x.IsRevoked).HasColumnName("is_revoked");
+        b.Property(x => x.CreatedAt).HasColumnName("created_at");
+        b.Property(x => x.DeviceInfo).HasColumnName("device_info").HasMaxLength(512);
+
+        b.Ignore(x => x.IsActive);
+
+        b.HasIndex(x => x.TokenHash).IsUnique();
+        b.HasIndex(x => x.UserId);
+        b.HasIndex(x => x.FamilyId);
+
+        b.HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+}
+
 public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> b)

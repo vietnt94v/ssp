@@ -1,7 +1,6 @@
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Ssp.Cmms.Application.Features.Auth;
+using Ssp.Cmms.Infrastructure.Auth;
 
 namespace Ssp.Cmms.Api.Controllers;
 
@@ -9,21 +8,50 @@ namespace Ssp.Cmms.Api.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    private readonly IAuthService _auth;
 
-    public AuthController(IMediator mediator)
+    public AuthController(IAuthService auth)
     {
-        _mediator = mediator;
+        _auth = auth;
     }
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult<LoginResult>> Login(
-        LoginCommand command,
+    public async Task<ActionResult<AuthUserDto>> Login(
+        [FromBody] LoginRequest request,
         CancellationToken ct)
     {
-        var result = await _mediator.Send(command, ct);
-        return Ok(result);
+        var user = await _auth.LoginAsync(
+            request.Email,
+            request.Password,
+            HttpContext,
+            ct);
+
+        return Ok(user);
+    }
+
+    [HttpPost("refresh-token")]
+    [AllowAnonymous]
+    public async Task<IActionResult> RefreshToken(CancellationToken ct)
+    {
+        await _auth.RefreshAsync(HttpContext, ct);
+        return NoContent();
+    }
+
+    [HttpPost("logout")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Logout(CancellationToken ct)
+    {
+        await _auth.LogoutAsync(HttpContext, ct);
+        return NoContent();
+    }
+
+    [HttpGet("me")]
+    [Authorize]
+    public async Task<ActionResult<AuthUserDto>> Me(CancellationToken ct)
+    {
+        var user = await _auth.GetCurrentUserAsync(HttpContext, ct);
+        return Ok(user);
     }
 
     [HttpPost("forgot-password")]
@@ -36,5 +64,7 @@ public class AuthController : ControllerBase
         return NoContent();
     }
 }
+
+public record LoginRequest(string Email, string Password);
 
 public record ForgotPasswordRequest(string Email);

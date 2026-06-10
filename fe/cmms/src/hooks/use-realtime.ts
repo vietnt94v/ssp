@@ -12,11 +12,11 @@ import type { Alert, WorkOrder } from '@/types';
 
 export function useRealtime() {
   const queryClient = useQueryClient();
-  const token = useAuthStore((s) => s.token);
+  const user = useAuthStore((s) => s.user);
   const incrementUnread = useNotificationStore((s) => s.increment);
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
 
     let active = true;
 
@@ -50,5 +50,5 @@ export function useRealtime() {
       active = false;
       void stopHubConnection();
     };
-  }, [token, queryClient, incrementUnread]);
+  }, [user, queryClient, incrementUnread]);
 }

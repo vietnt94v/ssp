@@ -4,6 +4,7 @@ using Serilog;
 using Ssp.Cmms.Api.Middleware;
 using Ssp.Cmms.Application;
 using Ssp.Cmms.Infrastructure;
+using Ssp.Cmms.Infrastructure.Auth;
 using Ssp.Cmms.Infrastructure.Jobs;
 using Ssp.Cmms.Infrastructure.Realtime;
 
@@ -34,23 +35,26 @@ builder.Services.AddSwaggerGen(options =>
             "Full contract with examples: be/docs/openapi/cmms-api.yaml"
     });
 
-    var jwtScheme = new OpenApiSecurityScheme
+    // Auth uses an HttpOnly access_token cookie set by /api/auth/login.
+    // Swagger UI cannot set HttpOnly cookies, so this scheme is documentation
+    // only; use the SPA flow for authenticated calls.
+    var cookieScheme = new OpenApiSecurityScheme
     {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
+        Name = AuthCookieSettings.AccessTokenName,
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Cookie,
+        Description =
+            "JWT delivered as an HttpOnly cookie via POST /api/auth/login.",
         Reference = new OpenApiReference
         {
             Type = ReferenceType.SecurityScheme,
-            Id = "Bearer"
+            Id = "CookieAuth"
         }
     };
-    options.AddSecurityDefinition("Bearer", jwtScheme);
+    options.AddSecurityDefinition("CookieAuth", cookieScheme);
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        [jwtScheme] = Array.Empty<string>()
+        [cookieScheme] = Array.Empty<string>()
     });
 });
 

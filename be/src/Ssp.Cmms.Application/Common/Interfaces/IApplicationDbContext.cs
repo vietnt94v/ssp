@@ -20,6 +20,7 @@ public interface IApplicationDbContext
     DbSet<MaintenanceLog> MaintenanceLogs { get; }
     DbSet<SparePart> SpareParts { get; }
     DbSet<Alert> Alerts { get; }
+    DbSet<RefreshToken> RefreshTokens { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

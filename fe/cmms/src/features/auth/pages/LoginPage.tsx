@@ -14,14 +14,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuthStore } from '@/stores/auth-store';
-import { login, toUser } from '../api/auth-api';
+import { useAuth } from '../hooks/use-auth';
 import { loginSchema } from '../schemas/auth-schema';
 import type { LoginFormValues } from '../schemas/auth-schema';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const setSession = useAuthStore((s) => s.setSession);
+  const { login } = useAuth();
   const [submitting, setSubmitting] = useState(false);
 
   const {
@@ -36,8 +35,7 @@ export default function LoginPage() {
   const onSubmit = async (values: LoginFormValues) => {
     setSubmitting(true);
     try {
-      const response = await login(values.email, values.password);
-      setSession(response.accessToken, toUser(response));
+      await login(values.email, values.password);
       toast.success('Welcome back!');
       navigate('/dashboard');
     } catch {

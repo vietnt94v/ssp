@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, subscribeWithSelector } from 'zustand/middleware';
 
 type Theme = 'light' | 'dark';
 
@@ -30,31 +30,26 @@ export function applyTheme(theme: Theme) {
 }
 
 export const useUiStore = create<UiState>()(
-  persist(
-    (set, get) => ({
-      sidebarOpen: true,
-      activeModal: null,
-      theme: getSystemTheme(),
-      toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
-      setSidebarOpen: (open) => set({ sidebarOpen: open }),
-      openModal: (id) => set({ activeModal: id }),
-      closeModal: () => set({ activeModal: null }),
-      setTheme: (theme) => {
-        applyTheme(theme);
-        set({ theme });
+  subscribeWithSelector(
+    persist(
+      (set, get) => ({
+        sidebarOpen: true,
+        activeModal: null,
+        theme: getSystemTheme(),
+        toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
+        setSidebarOpen: (open) => set({ sidebarOpen: open }),
+        openModal: (id) => set({ activeModal: id }),
+        closeModal: () => set({ activeModal: null }),
+        setTheme: (theme) => set({ theme }),
+        toggleTheme: () =>
+          set({ theme: get().theme === 'dark' ? 'light' : 'dark' }),
+      }),
+      {
+        name: 'cmms-ui',
+        partialize: (state) => ({ theme: state.theme }),
       },
-      toggleTheme: () => {
-        const next: Theme = get().theme === 'dark' ? 'light' : 'dark';
-        applyTheme(next);
-        set({ theme: next });
-      },
-    }),
-    {
-      name: 'cmms-ui',
-      partialize: (state) => ({ theme: state.theme }),
-      onRehydrateStorage: () => (state) => {
-        applyTheme(state?.theme ?? getSystemTheme());
-      },
-    },
+    ),
   ),
 );
+
+useUiStore.subscribe((s) => s.theme, applyTheme, { fireImmediately: true });

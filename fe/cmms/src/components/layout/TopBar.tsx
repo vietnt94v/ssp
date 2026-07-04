@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Bell, LogOut, Menu, User as UserIcon } from 'lucide-react';
+import { Bell, LogOut, Menu, Moon, Sun, User as UserIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -18,6 +18,8 @@ export function TopBar() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const toggleSidebar = useUiStore((s) => s.toggleSidebar);
+  const theme = useUiStore((s) => s.theme);
+  const toggleTheme = useUiStore((s) => s.toggleTheme);
   const unreadCount = useNotificationStore((s) => s.unreadCount);
 
   const handleLogout = async () => {
@@ -37,6 +39,19 @@ export function TopBar() {
       </Button>
 
       <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {theme === 'dark' ? (
+            <Sun className="h-5 w-5" />
+          ) : (
+            <Moon className="h-5 w-5" />
+          )}
+        </Button>
+
         <Button
           variant="ghost"
           size="icon"

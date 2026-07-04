@@ -4,6 +4,10 @@ import { AppShell } from '@/components/layout/AppShell';
 import { AuthGuard } from '@/routes/AuthGuard';
 import { ProtectedRoute } from '@/routes/ProtectedRoute';
 
+const ClientDemoPage = lazy(
+  () => import('@/features/client/pages/ClientDemoPage'),
+);
+
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
 const ForgotPasswordPage = lazy(
   () => import('@/features/auth/pages/ForgotPasswordPage'),
@@ -84,6 +88,7 @@ const LocationsSettingsPage = lazy(
 
 export const router = createBrowserRouter([
   { path: '/', element: <Navigate to="/dashboard" replace /> },
+  { path: '/client', element: <ClientDemoPage /> },
   { path: '/auth/login', element: <LoginPage /> },
   { path: '/auth/forgot-password', element: <ForgotPasswordPage /> },
   {

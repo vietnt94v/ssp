@@ -7,13 +7,9 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ allowed }: ProtectedRouteProps) {
-  const user = useAuthStore((s) => s.user);
+  const hasAccess = useAuthStore((s) => !allowed || s.hasRole(allowed));
 
-  if (!user) {
-    return <Navigate to="/auth/login" replace />;
-  }
-
-  if (allowed && !allowed.includes(user.role)) {
+  if (!hasAccess) {
     return <Navigate to="/dashboard" replace />;
   }
 
